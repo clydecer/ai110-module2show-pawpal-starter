@@ -1,6 +1,6 @@
 # PawPal+ (Module 2 Project)
 
-You are building **PawPal+**, a Streamlit app that helps a pet owner plan care tasks for their pet.
+**PawPal+** is a Streamlit app for planning care tasks across multiple pets.
 
 ## Scenario
 
@@ -37,6 +37,15 @@ python -m venv .venv
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
+
+Start the interface with `streamlit run app.py`. Pet and task data is kept in Streamlit session state and is lost when the session ends; it is not stored in a database.
+
+### Features
+
+- Add pets and schedule, edit, or complete their care tasks.
+- Sort by due time and filter the schedule by pet or completion status.
+- Show same-time conflict warnings and create daily or weekly recurring occurrences.
+- Build a daily plan using priority and an available-minutes budget.
 
 ### Suggested workflow
 
@@ -76,20 +85,21 @@ Today's plan (35 minute budget): Morning walk, Evening medication
 python -m pytest
 ```
 
-The tests cover task addition and completion, sorting, filtering, recurrence, conflict detection, ownership checks, empty schedules, and daily planning. Sample output from a successful run:
+The tests cover task addition and completion, sorting, filtering, recurrence, conflict detection, ownership checks, empty schedules, daily planning, and the Streamlit pet/task/completion workflow. Sample output from a successful run:
 
 ```
 ============================= test session starts ==============================
 platform darwin -- Python 3.9.6, pytest-8.4.2, pluggy-1.6.0
 rootdir: /Users/clydecermeus/Documents/Codex/2026-11-06/lo/pawpal
-collected 11 items
+collected 12 items
 
+tests/test_app.py .                                                      [  8%]
 tests/test_pawpal.py ...........                                         [100%]
 
-============================== 11 passed in 0.02s ==============================
+============================== 12 passed in 0.79s ==============================
 ```
 
-**Provisional confidence: 3/5 stars.** The core paths and several edge cases pass, but the UI integration and additional scheduling scenarios still need verification.
+**Provisional confidence: 3/5 stars.** Core behavior and one UI workflow pass; more UI paths and scheduling edge cases still need verification.
 
 ## 📐 Smarter Scheduling
 
@@ -103,12 +113,10 @@ tests/test_pawpal.py ...........                                         [100%]
 
 ## 📸 Demo Walkthrough
 
-Describe your app in numbered steps so a reader can follow along without watching a video:
+1. Run `streamlit run app.py`, enter an owner name, and add a pet.
+2. Schedule a task for that pet with its date, time, duration, priority, and frequency. Add more pets and tasks as needed.
+3. Select a date and filter by pet or status to see the time-sorted schedule. Same-time conflicts appear as warnings.
+4. Choose an incomplete task to edit it or mark it complete. Daily and weekly tasks create a new occurrence on the next scheduled date.
+5. Set available minutes to see the daily plan, selected by priority and then displayed by time. The plan does not automatically resolve conflicts.
 
-1. <!-- Describe this step -->
-2. <!-- Describe this step -->
-3. <!-- Describe this step -->
-4. <!-- Describe this step -->
-5. <!-- Add more steps as needed -->
-
-**Screenshot or video** *(optional)*: <!-- Insert a screenshot or link to a demo video here -->
+The [sample CLI output](#-sample-output) above shows sorting, filtering, a warning, recurrence, and a daily plan. The draft and final class diagrams are in `diagrams/uml_draft.mmd` and `diagrams/uml_final.mmd`.

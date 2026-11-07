@@ -1,5 +1,7 @@
 # PawPal+ Project Reflection
 
+The collaboration and personal reflection below are a draft based on the work recorded in this project. The project owner should review and personalize subjective statements before submission.
+
 ## 1. System Design
 
 **Three core user actions**
@@ -49,13 +51,11 @@ The conflict method was reviewed for readability: `itertools.combinations` expre
 
 **a. How you used AI**
 
-- How did you use AI tools during this project (for example: design brainstorming, debugging, refactoring)?
-- What kinds of prompts or questions were most helpful?
+Codex helped break down the assignment, brainstorm the classes, create the UML and skeleton, implement the scheduler and interface, and write and run tests. Requests focused on one project phase at a time made the work and its outputs easier to review. All phases were discussed in the same chat rather than in separate chats; using separate sessions might have made the design, algorithms, and testing discussions easier to locate.
 
 **b. Judgment and verification**
 
-- Describe one moment where you did not accept an AI suggestion as-is.
-- How did you evaluate or verify what the AI suggested?
+The initial implementation used an exact-start-time conflict check instead of the broader overlap detection that duration fields could support. This kept the first version understandable while explicitly documenting the cases it misses. The code and tests were reviewed against that narrower behavior; the user should add their own example of a suggestion they personally rejected or changed if applicable.
 
 ---
 
@@ -63,11 +63,11 @@ The conflict method was reviewed for readability: `itertools.combinations` expre
 
 **a. What you tested**
 
-The test suite checks task addition and completion, chronological sorting, pet and status filters, daily and weekly recurrence, duplicate completion, conflict detection, ownership, empty schedules, and priority-based planning within a time budget. These checks cover both ordinary use and cases that could otherwise silently create an incorrect schedule.
+The test suite checks task addition and completion, chronological sorting, pet and status filters, daily and weekly recurrence, duplicate completion, conflict detection, ownership, empty schedules, priority-based planning, and a Streamlit add-and-complete workflow. These checks cover both ordinary use and cases that could otherwise silently create an incorrect schedule.
 
 **b. Confidence**
 
-The current automated results support provisional confidence of 3/5: the core paths pass, but the UI has not yet been connected and tested. Further work should test overlapping durations, time zones, and a larger variety of scheduling constraints. This is a provisional assessment to review alongside the final app.
+The current automated results support provisional confidence of 3/5: the core paths and a UI workflow pass, but not every interaction or edge case has been tested. Further work should test overlapping durations, time zones, and a larger variety of scheduling constraints. This is a provisional assessment for the project owner to review.
 
 ---
 
@@ -75,12 +75,12 @@ The current automated results support provisional confidence of 3/5: the core pa
 
 **a. What went well**
 
-- What part of this project are you most satisfied with?
+The working CLI demonstration and automated tests make the scheduler's behavior easier to inspect independently of the interface. The project owner can replace this with their own perspective.
 
 **b. What you would improve**
 
-- If you had another iteration, what would you improve or redesign?
+Add durable storage, detect overlapping durations, and make the planner resolve conflicts while considering owner preferences.
 
 **c. Key takeaway**
 
-- What is one important thing you learned about designing systems or working with AI on this project?
+The process illustrates the lead architect's role: define responsibilities, inspect AI-generated code, make explicit tradeoffs, and verify behavior rather than treating generated output as automatically correct. The project owner should add their own learning from the experience.
