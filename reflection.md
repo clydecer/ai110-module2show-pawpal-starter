@@ -21,13 +21,13 @@ An owner can have multiple pets, and each pet can have multiple tasks. The sched
 
 **a. Initial design**
 
-- Briefly describe your initial UML design.
-- What classes did you include, and what responsibilities did you assign to each?
+The initial UML uses four classes. An `Owner` holds pets and can gather their tasks; each `Pet` holds its own details and tasks. A `Task` describes a care activity, including its due date and time, duration, priority, frequency, and completion status. A `Scheduler` accesses the owner to organize tasks, detect conflicts, handle completion and recurrence, and build a daily plan. This keeps the user interface separate from the care and scheduling logic.
 
 **b. Design changes**
 
-- Did your design change during implementation?
-- If yes, describe at least one change and why you made it.
+The draft diagram was translated into class skeletons without a structural change: the scheduler reaches tasks through the owner and pets, rather than maintaining a second task list. The task model includes a full date and time as well as duration and priority so that future recurrence and daily planning have the information they need.
+
+A review of the skeleton identified decisions to resolve during implementation. Filtering by pet name may be ambiguous if two pets share a name, so the implementation should define how that case works. Completing a recurring task more than once must not create duplicate next occurrences, and the scheduler must verify that the task belongs to the supplied pet. Conflict detection should use dates as well as times; whether it considers overlapping durations will be an explicit tradeoff. These are review findings, not features implemented yet.
 
 ---
 

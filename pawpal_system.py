@@ -1,4 +1,4 @@
-"""Draft object model for the PawPal+ care scheduler."""
+"""Core objects for the PawPal+ care scheduler."""
 
 from dataclasses import dataclass, field
 from datetime import date, datetime
@@ -18,7 +18,7 @@ class Task:
 
     def mark_complete(self) -> None:
         """Mark this occurrence as complete."""
-        raise NotImplementedError
+        self.completed = True
 
 
 @dataclass
@@ -32,11 +32,11 @@ class Pet:
 
     def add_task(self, task: Task) -> None:
         """Add a care task to this pet."""
-        raise NotImplementedError
+        self.tasks.append(task)
 
     def get_tasks(self) -> List[Task]:
         """Return this pet's care tasks."""
-        raise NotImplementedError
+        return list(self.tasks)
 
 
 @dataclass
@@ -49,26 +49,27 @@ class Owner:
 
     def add_pet(self, pet: Pet) -> None:
         """Add a pet to this owner."""
-        raise NotImplementedError
+        self.pets.append(pet)
 
     def get_all_tasks(self) -> List[Task]:
         """Collect tasks from all of this owner's pets."""
-        raise NotImplementedError
+        return [task for pet in self.pets for task in pet.get_tasks()]
 
 
 class Scheduler:
     """Organize an owner's pet-care tasks."""
 
     def __init__(self, owner: Owner) -> None:
+        """Connect the scheduler to an owner."""
         self.owner = owner
 
     def get_all_tasks(self) -> List[Task]:
         """Retrieve tasks from the owner's pets."""
-        raise NotImplementedError
+        return self.owner.get_all_tasks()
 
     def sort_by_time(self) -> List[Task]:
         """Return tasks in chronological order."""
-        raise NotImplementedError
+        return sorted(self.get_all_tasks(), key=lambda task: task.due_at)
 
     def filter_tasks(
         self, pet_name: Optional[str] = None, completed: Optional[bool] = None
@@ -81,8 +82,13 @@ class Scheduler:
         raise NotImplementedError
 
     def complete_task(self, pet: Pet, task: Task) -> None:
-        """Complete a task and handle any next occurrence."""
-        raise NotImplementedError
+        """Mark a task belonging to one of the owner's pets complete."""
+        # Identity checks prevent an equal-looking task or pet from being mistaken for this one.
+        if not any(owned_pet is pet for owned_pet in self.owner.pets):
+            raise ValueError("Pet does not belong to this owner")
+        if not any(pet_task is task for pet_task in pet.tasks):
+            raise ValueError("Task does not belong to this pet")
+        task.mark_complete()
 
     def build_daily_plan(self, day: date, available_minutes: int) -> List[Task]:
         """Plan tasks for a day using the available time and priorities."""
