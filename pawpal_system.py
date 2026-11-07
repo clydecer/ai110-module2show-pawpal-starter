@@ -107,8 +107,9 @@ class Scheduler:
         task.mark_complete()
         if frequency != "once":
             days = 1 if frequency == "daily" else 7
-            # Advance from the scheduled date to preserve the established cadence.
-            pet.add_task(replace(task, due_at=task.due_at + timedelta(days=days), completed=False))
+            # Use completion day while preserving the task's time of day.
+            next_due = datetime.combine(date.today() + timedelta(days=days), task.due_at.timetz())
+            pet.add_task(replace(task, due_at=next_due, completed=False))
 
     def build_daily_plan(self, day: date, available_minutes: int) -> List[Task]:
         """Select incomplete tasks by priority within a time budget, then sort by time."""

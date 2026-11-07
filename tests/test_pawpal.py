@@ -1,6 +1,6 @@
 """Initial tests for PawPal+ core behavior."""
 
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 
 import pytest
 
@@ -75,9 +75,19 @@ def test_recurring_task_creates_one_next_occurrence(schedule, frequency, days):
     scheduler.complete_task(pet, task)
     assert task.completed
     assert len(pet.tasks) == 2
-    assert pet.tasks[1].due_at == task.due_at + timedelta(days=days)
+    assert pet.tasks[1].due_at.date() == date.today() + timedelta(days=days)
+    assert pet.tasks[1].due_at.time() == task.due_at.time()
     assert not pet.tasks[1].completed
     assert pet.tasks[1].frequency == frequency
+
+
+def test_overdue_daily_task_repeats_tomorrow(schedule):
+    scheduler, pet, _ = schedule
+    old_due = datetime.combine(date.today() - timedelta(days=10), datetime.min.time())
+    task = Task("Medicine", old_due, 5, "high", "daily")
+    pet.add_task(task)
+    scheduler.complete_task(pet, task)
+    assert pet.tasks[-1].due_at.date() == date.today() + timedelta(days=1)
 
 
 def test_one_time_completion_does_not_recur(schedule):

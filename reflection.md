@@ -1,7 +1,5 @@
 # PawPal+ Project Reflection
 
-The collaboration and personal reflection below are a draft based on the work recorded in this project. The project owner should review and personalize subjective statements before submission.
-
 ## 1. System Design
 
 **Three core user actions**
@@ -41,7 +39,7 @@ The daily planner considers the selected date, completion status, task priority,
 
 **b. Tradeoffs**
 
-Conflict detection checks exact date-and-start-time matches, rather than overlapping durations. This is straightforward for an initial scheduler but can miss a task starting before another ends; users need to review the schedule until overlap detection is added. Recurrence advances from the scheduled occurrence, preserving its cadence even if it is completed late.
+Conflict detection checks exact date-and-start-time matches, rather than overlapping durations. This is straightforward for an initial scheduler but can miss a task starting before another ends; users need to review the schedule until overlap detection is added. Recurring tasks are scheduled one or seven days after completion, even when the original task is overdue.
 
 The conflict method was reviewed for readability: `itertools.combinations` expresses each unique pair directly and avoids manually managing nested indexes. It remains a pairwise comparison, which is appropriate for a small set of pet-care tasks but grows quadratically as the list grows.
 
@@ -55,7 +53,7 @@ Codex helped break down the assignment, brainstorm the classes, create the UML a
 
 **b. Judgment and verification**
 
-The initial implementation used an exact-start-time conflict check instead of the broader overlap detection that duration fields could support. This kept the first version understandable while explicitly documenting the cases it misses. The code and tests were reviewed against that narrower behavior; the user should add their own example of a suggestion they personally rejected or changed if applicable.
+The AI program worked well and seemed to keep all the classes and ideas we had intact. However, I do think that it got too many extra ideas that I had to keep it on track and make sure the AI kept everything simple.
 
 ---
 
@@ -67,7 +65,7 @@ The test suite checks task addition and completion, chronological sorting, pet a
 
 **b. Confidence**
 
-The current automated results support provisional confidence of 3/5: the core paths and a UI workflow pass, but not every interaction or edge case has been tested. Further work should test overlapping durations, time zones, and a larger variety of scheduling constraints. This is a provisional assessment for the project owner to review.
+I think I give it a confidence rating of 4/5.
 
 ---
 
@@ -75,7 +73,7 @@ The current automated results support provisional confidence of 3/5: the core pa
 
 **a. What went well**
 
-The working CLI demonstration and automated tests make the scheduler's behavior easier to inspect independently of the interface. The project owner can replace this with their own perspective.
+The working CLI demonstration and automated tests make the scheduler's behavior easier to inspect independently of the interface. Working with the AI assistant was smooth and made sure that the program and code all went smoothly. It was very easy and convenient to change certain things and add little flourishes.
 
 **b. What you would improve**
 
@@ -83,4 +81,4 @@ Add durable storage, detect overlapping durations, and make the planner resolve 
 
 **c. Key takeaway**
 
-The process illustrates the lead architect's role: define responsibilities, inspect AI-generated code, make explicit tradeoffs, and verify behavior rather than treating generated output as automatically correct. The project owner should add their own learning from the experience.
+I think this was a good project to see how it was building a system from the ground up with an AI, it was more stress free and saved a lot more time than if I did by myself by hand.
