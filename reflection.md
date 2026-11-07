@@ -27,7 +27,7 @@ The initial UML uses four classes. An `Owner` holds pets and can gather their ta
 
 The draft diagram was translated into class skeletons without a structural change: the scheduler reaches tasks through the owner and pets, rather than maintaining a second task list. The task model includes a full date and time as well as duration and priority so that future recurrence and daily planning have the information they need.
 
-A review of the skeleton identified decisions to resolve during implementation. Filtering by pet name may be ambiguous if two pets share a name, so the implementation should define how that case works. Completing a recurring task more than once must not create duplicate next occurrences, and the scheduler must verify that the task belongs to the supplied pet. Conflict detection should use dates as well as times; whether it considers overlapping durations will be an explicit tradeoff. These are review findings, not features implemented yet.
+A review identified several decisions that the implementation now addresses: name filtering matches all pets with the same name, completion checks that the task belongs to the supplied pet, and completing an occurrence twice does not create duplicates. Conflicts compare full dates and start times; overlapping durations remain a limitation.
 
 ---
 
@@ -35,13 +35,13 @@ A review of the skeleton identified decisions to resolve during implementation. 
 
 **a. Constraints and priorities**
 
-- What constraints does your scheduler consider (for example: time, priority, preferences)?
-- How did you decide which constraints mattered most?
+The daily planner considers the selected date, completion status, task priority, duration, and a total time budget. It chooses higher-priority tasks first, then returns the selected tasks in chronological order. Owner preferences are stored but not used yet.
 
 **b. Tradeoffs**
 
-- Describe one tradeoff your scheduler makes.
-- Why is that tradeoff reasonable for this scenario?
+Conflict detection checks exact date-and-start-time matches, rather than overlapping durations. This is straightforward for an initial scheduler but can miss a task starting before another ends; users need to review the schedule until overlap detection is added. Recurrence advances from the scheduled occurrence, preserving its cadence even if it is completed late.
+
+The conflict method was reviewed for readability: `itertools.combinations` expresses each unique pair directly and avoids manually managing nested indexes. It remains a pairwise comparison, which is appropriate for a small set of pet-care tasks but grows quadratically as the list grows.
 
 ---
 
@@ -63,13 +63,11 @@ A review of the skeleton identified decisions to resolve during implementation. 
 
 **a. What you tested**
 
-- What behaviors did you test?
-- Why were these tests important?
+The test suite checks task addition and completion, chronological sorting, pet and status filters, daily and weekly recurrence, duplicate completion, conflict detection, ownership, empty schedules, and priority-based planning within a time budget. These checks cover both ordinary use and cases that could otherwise silently create an incorrect schedule.
 
 **b. Confidence**
 
-- How confident are you that your scheduler works correctly?
-- What edge cases would you test next if you had more time?
+The current automated results support provisional confidence of 3/5: the core paths pass, but the UI has not yet been connected and tested. Further work should test overlapping durations, time zones, and a larger variety of scheduling constraints. This is a provisional assessment to review alongside the final app.
 
 ---
 

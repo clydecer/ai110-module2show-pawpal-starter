@@ -56,36 +56,50 @@ Run `python main.py` from the project directory to print the example schedule. T
 Today's Schedule for Jordan (2026-11-06)
 ---------------------------------------------
 08:00  Mochi: Breakfast (10 min)
-09:00  Biscuit: Morning walk (30 min)
+08:00  Biscuit: Morning walk (30 min)
 18:00  Mochi: Evening medication (5 min)
+
+Mochi's incomplete tasks:
+- Evening medication
+- Breakfast
+
+Warning: Breakfast and Morning walk both start at 08:00.
+
+Completed Breakfast; next occurrence: 2026-11-07 08:00
+Completed tasks: Breakfast
+Today's plan (35 minute budget): Morning walk, Evening medication
 ```
 
 ## 🧪 Testing PawPal+
 
 ```bash
-# Run the full test suite:
-pytest
-
-# Run with coverage:
-pytest --cov
+python -m pytest
 ```
 
-Sample test output:
+The tests cover task addition and completion, sorting, filtering, recurrence, conflict detection, ownership checks, empty schedules, and daily planning. Sample output from a successful run:
 
 ```
-# Paste your pytest output here
+============================= test session starts ==============================
+platform darwin -- Python 3.9.6, pytest-8.4.2, pluggy-1.6.0
+rootdir: /Users/clydecermeus/Documents/Codex/2026-11-06/lo/pawpal
+collected 11 items
+
+tests/test_pawpal.py ...........                                         [100%]
+
+============================== 11 passed in 0.02s ==============================
 ```
+
+**Provisional confidence: 3/5 stars.** The core paths and several edge cases pass, but the UI integration and additional scheduling scenarios still need verification.
 
 ## 📐 Smarter Scheduling
 
-> Fill in once you've implemented scheduling logic.
-
 | Feature | Method(s) | Notes |
 |---------|-----------|-------|
-| Task sorting | | e.g., by priority, duration |
-| Filtering | | e.g., skip tasks if time runs out |
-| Conflict handling | | e.g., overlapping time slots |
-| Recurring tasks | | e.g., daily vs. weekly |
+| Task sorting | `Scheduler.sort_by_time()` | Orders tasks by full due date and time. |
+| Filtering | `Scheduler.filter_tasks()` | Filters by completion status and/or case-insensitive pet name; duplicate names all match. |
+| Conflict detection | `Scheduler.detect_conflicts()` | Returns pairs of incomplete tasks with the same date and start time, across pets. It does not detect overlapping durations. |
+| Recurring tasks | `Scheduler.complete_task()` | Completing a daily or weekly task creates one incomplete occurrence one or seven days after its scheduled date; repeat completion does not create duplicates. Call this scheduler method for recurrence. |
+| Daily planning | `Scheduler.build_daily_plan()` | Selects incomplete tasks for a date by priority within a total minute budget, then displays them in time order. It does not resolve conflicts or use owner preferences. |
 
 ## 📸 Demo Walkthrough
 
